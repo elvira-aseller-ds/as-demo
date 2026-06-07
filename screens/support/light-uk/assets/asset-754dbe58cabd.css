@@ -1,0 +1,41 @@
+@charset "utf-8";
+
+:where(.css-1q3a9c7).ant-tag { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; font-size: 14px; box-sizing: border-box; }
+
+:where(.css-1q3a9c7).ant-tag::before, :where(.css-1q3a9c7).ant-tag::after { box-sizing: border-box; }
+
+:where(.css-1q3a9c7).ant-tag [class^="ant-tag"], :where(.css-1q3a9c7).ant-tag [class*=" ant-tag"] { box-sizing: border-box; }
+
+:where(.css-1q3a9c7).ant-tag [class^="ant-tag"]::before, :where(.css-1q3a9c7).ant-tag [class*=" ant-tag"]::before, :where(.css-1q3a9c7).ant-tag [class^="ant-tag"]::after, :where(.css-1q3a9c7).ant-tag [class*=" ant-tag"]::after { box-sizing: border-box; }
+
+:where(.css-1q3a9c7).ant-tag { box-sizing: border-box; margin: 0px; padding: 0px; color: rgb(255, 255, 255); font-size: 12px; line-height: 20px; list-style: none; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; display: inline-block; height: auto; margin-inline-end: 8px; padding-inline: 7px; white-space: nowrap; background: rgb(51, 51, 60); border: 1px solid rgb(66, 66, 66); border-radius: 8px; opacity: 1; transition: 0.2s; text-align: start; position: relative; }
+
+:where(.css-1q3a9c7).ant-tag.ant-tag-rtl { direction: rtl; }
+
+:where(.css-1q3a9c7).ant-tag, :where(.css-1q3a9c7).ant-tag a, :where(.css-1q3a9c7).ant-tag a:hover { color: rgb(255, 255, 255); }
+
+:where(.css-1q3a9c7).ant-tag .ant-tag-close-icon { margin-inline-start: 3px; font-size: 10px; color: rgba(255, 255, 255, 0.45); cursor: pointer; transition: 0.2s; }
+
+:where(.css-1q3a9c7).ant-tag .ant-tag-close-icon:hover { color: rgb(255, 255, 255); }
+
+:where(.css-1q3a9c7).ant-tag.ant-tag-has-color { border-color: transparent; }
+
+:where(.css-1q3a9c7).ant-tag.ant-tag-has-color, :where(.css-1q3a9c7).ant-tag.ant-tag-has-color a, :where(.css-1q3a9c7).ant-tag.ant-tag-has-color a:hover, :where(.css-1q3a9c7).ant-tag.ant-tag-has-color .anticon-close, :where(.css-1q3a9c7).ant-tag.ant-tag-has-color .anticon-close:hover { color: rgb(255, 255, 255); }
+
+:where(.css-1q3a9c7).ant-tag-checkable { background-color: transparent; border-color: transparent; cursor: pointer; }
+
+:where(.css-1q3a9c7).ant-tag-checkable:not(.ant-tag-checkable-checked):hover { color: rgb(68, 140, 192); background-color: rgba(255, 255, 255, 0.12); }
+
+:where(.css-1q3a9c7).ant-tag-checkable:active, :where(.css-1q3a9c7).ant-tag-checkable-checked { color: rgb(255, 255, 255); }
+
+:where(.css-1q3a9c7).ant-tag-checkable-checked { background-color: rgb(68, 140, 192); }
+
+:where(.css-1q3a9c7).ant-tag-checkable-checked:hover { background-color: rgb(107, 173, 214); }
+
+:where(.css-1q3a9c7).ant-tag-checkable:active { background-color: rgb(56, 112, 151); }
+
+:where(.css-1q3a9c7).ant-tag-hidden { display: none; }
+
+:where(.css-1q3a9c7).ant-tag > .anticon + span, :where(.css-1q3a9c7).ant-tag > span + .anticon { margin-inline-start: 7px; }
+
+:where(.css-1q3a9c7).ant-tag-borderless { border-color: transparent; background: rgb(51, 51, 60); }

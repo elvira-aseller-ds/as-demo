@@ -1,0 +1,37 @@
+@charset "utf-8";
+
+:where(.css-1q3a9c7).ant-rate { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; font-size: 14px; box-sizing: border-box; }
+
+:where(.css-1q3a9c7).ant-rate::before, :where(.css-1q3a9c7).ant-rate::after { box-sizing: border-box; }
+
+:where(.css-1q3a9c7).ant-rate [class^="ant-rate"], :where(.css-1q3a9c7).ant-rate [class*=" ant-rate"] { box-sizing: border-box; }
+
+:where(.css-1q3a9c7).ant-rate [class^="ant-rate"]::before, :where(.css-1q3a9c7).ant-rate [class*=" ant-rate"]::before, :where(.css-1q3a9c7).ant-rate [class^="ant-rate"]::after, :where(.css-1q3a9c7).ant-rate [class*=" ant-rate"]::after { box-sizing: border-box; }
+
+:where(.css-1q3a9c7).ant-rate { box-sizing: border-box; margin: 0px; padding: 0px; color: rgb(216, 189, 20); font-size: 20px; line-height: 1; list-style: none; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; display: inline-block; outline: none; }
+
+:where(.css-1q3a9c7).ant-rate-disabled.ant-rate .ant-rate-star { cursor: default; }
+
+:where(.css-1q3a9c7).ant-rate-disabled.ant-rate .ant-rate-star > div:hover { transform: scale(1); }
+
+:where(.css-1q3a9c7).ant-rate .ant-rate-star { position: relative; display: inline-block; color: inherit; cursor: pointer; }
+
+:where(.css-1q3a9c7).ant-rate .ant-rate-star:not(:last-child) { margin-inline-end: 8px; }
+
+:where(.css-1q3a9c7).ant-rate .ant-rate-star > div { transition: 0.2s, outline; }
+
+:where(.css-1q3a9c7).ant-rate .ant-rate-star > div:hover { transform: scale(1.1); }
+
+:where(.css-1q3a9c7).ant-rate .ant-rate-star > div:focus { outline: 0px; }
+
+:where(.css-1q3a9c7).ant-rate .ant-rate-star > div:focus-visible { outline: rgb(216, 189, 20) dashed 1px; transform: scale(1.1); }
+
+:where(.css-1q3a9c7).ant-rate .ant-rate-star-first, :where(.css-1q3a9c7).ant-rate .ant-rate-star-second { color: rgba(255, 255, 255, 0.12); transition: 0.2s; user-select: none; }
+
+:where(.css-1q3a9c7).ant-rate .ant-rate-star-first { position: absolute; top: 0px; inset-inline-start: 0px; width: 50%; height: 100%; overflow: hidden; opacity: 0; }
+
+:where(.css-1q3a9c7).ant-rate .ant-rate-star-half .ant-rate-star-first, :where(.css-1q3a9c7).ant-rate .ant-rate-star-half .ant-rate-star-second { opacity: 1; }
+
+:where(.css-1q3a9c7).ant-rate .ant-rate-star-half .ant-rate-star-first, :where(.css-1q3a9c7).ant-rate .ant-rate-star-full .ant-rate-star-second { color: inherit; }
+
+:where(.css-1q3a9c7).ant-rate-rtl.ant-rate { direction: rtl; }
