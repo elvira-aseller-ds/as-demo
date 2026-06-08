@@ -4,11 +4,66 @@
  *   1. Welcome modal — shown once (until email submitted). Button bypasses validation.
  *   2. Bottom-right controls: Return to website / Help / Demo Guide
  *   3. Demo Guide modal — TOC of all tours (T1-T13)
- *   4. Tour player — spotlight + tooltip + Next / Back / Skip / Close
+ *   4. Tour player — spotlight + tooltip + Next / Back / Close
  *   5. Tour-complete modal — Start again / Close / Return
  */
 (function() {
   'use strict';
+
+  // --- i18n -----------------------------------------------------------------
+  // Locale derived from window.DEMO_VARIANT (e.g. "light-uk" → "uk").
+  var LOCALE = (window.DEMO_VARIANT || '').indexOf('-uk') >= 0 ? 'uk' : 'en';
+  // Resolve a value that may be a plain string or { en, uk } dict.
+  function loc(v) {
+    if (v == null) return '';
+    if (typeof v === 'string') return v;
+    return v[LOCALE] || v.en || '';
+  }
+  var I18N = {
+    welcomeTitle:            { en: "Welcome to the Seller Exchange Demo", uk: "Ласкаво просимо до демо Seller Exchange" },
+    welcomeBody:             { en: "Take a quick guided tour to learn the platform's core features.", uk: "Пройдіть короткий тур, щоб ознайомитися з ключовими можливостями платформи." },
+    welcomeEmailLabel:       { en: "Your business email", uk: "Ваш робочий e-mail" },
+    welcomeEmailPlaceholder: { en: "you@example.com", uk: "you@example.com" },
+    welcomeStart:            { en: "Start tour", uk: "Почати тур" },
+
+    ctrlReturn: { en: "Return to the website",       uk: "Повернутися на сайт" },
+    ctrlHelp:   { en: "Help",                         uk: "Допомога" },
+    ctrlGuide:  { en: "Seller Exchange Demo Guide",  uk: "Демо-гід Seller Exchange" },
+
+    guideTitle:      { en: "Seller Exchange tours", uk: "Тури Seller Exchange" },
+    guideSteps:      { en: "steps",                  uk: "кроків" },
+    guideComingSoon: { en: "coming soon",            uk: "незабаром" },
+    guidePlayDemo:   { en: "Play demo",              uk: "Запустити демо" },
+    guideClose:      { en: "Close",                  uk: "Закрити" },
+
+    feedbackTitle:       { en: "Feedback", uk: "Зворотний зв'язок" },
+    feedbackBody: {
+      en: "If you have any feedback, we'd love to hear it. If you'd like to sign up fill the form with 'Your name. Sign up' and wait for the following instructions on the submitted e-mail.",
+      uk: "Якщо у вас є відгук — ми будемо раді його почути. Якщо хочете зареєструватися, заповніть форму у форматі «Ваше ім'я. Реєстрація» і чекайте наступних інструкцій на вказаний e-mail."
+    },
+    feedbackPlaceholder: { en: "Your message",                  uk: "Ваше повідомлення" },
+    feedbackSubmit:      { en: "Submit",                         uk: "Надіслати" },
+    feedbackClose:       { en: "Close",                          uk: "Закрити" },
+    privacyPolicy:       { en: "Privacy Policy",                 uk: "Політика конфіденційності" },
+    cookiePolicy:        { en: "Cookie Policy",                  uk: "Політика cookie" },
+
+    completeTitle:      { en: "Tour completed!",                                                       uk: "Тур завершено!" },
+    completeBody:       { en: "You've finished the tour. Explore other tours from the Demo Guide.",   uk: "Ви завершили тур. Інші тури можна знайти в Демо-гіді." },
+    completeStartAgain: { en: "Start again",                                                            uk: "Пройти знову" },
+    completeOpenGuide:  { en: "Open demo guide",                                                        uk: "Відкрити демо-гід" },
+    completeClose:      { en: "Close",                                                                  uk: "Закрити" },
+
+    back:        { en: "Back",       uk: "Назад" },
+    next:        { en: "Next",       uk: "Далі" },
+    finish:      { en: "Finish",     uk: "Завершити" },
+    closeTour:   { en: "Close tour", uk: "Закрити тур" },
+    stepXofY:    { en: "Step {n} of {total}", uk: "Крок {n} з {total}" }
+  };
+  function fmt(tmpl, params) {
+    var s = loc(tmpl);
+    for (var k in params) s = s.replace('{' + k + '}', params[k]);
+    return s;
+  }
 
   // --- Storage --------------------------------------------------------------
   var LS_WELCOME = 'demo-welcome-done';
@@ -57,10 +112,10 @@
   function buildWelcomeModal() {
     return el('div', { id: 'demo-welcome', class: 'demo-modal' }, [
       el('div', { class: 'demo-modal-content' }, [
-        el('h2', null, ['Welcome to the Seller Exchange Demo']),
-        el('p', null, ['Take a quick guided tour to learn the platform\'s core features.']),
-        el('label', { for: 'demo-email-input' }, ['Your business email']),
-        el('input', { type: 'email', id: 'demo-email-input', placeholder: 'you@example.com' }),
+        el('h2', null, [loc(I18N.welcomeTitle)]),
+        el('p', null, [loc(I18N.welcomeBody)]),
+        el('label', { for: 'demo-email-input' }, [loc(I18N.welcomeEmailLabel)]),
+        el('input', { type: 'email', id: 'demo-email-input', placeholder: loc(I18N.welcomeEmailPlaceholder) }),
         el('div', { style: 'margin-top:20px;display:flex;justify-content:center;gap:8px;' }, [
           el('button', {
             class: 'demo-btn',
@@ -71,7 +126,7 @@
               document.getElementById('demo-welcome').setAttribute('hidden', '');
               startTour('T1');
             }
-          }, ['Start tour'])
+          }, [loc(I18N.welcomeStart)])
         ])
       ])
     ]);
@@ -83,18 +138,18 @@
       el('button', {
         class: 'demo-ctrl-btn',
         onclick: function() { window.location.href = 'https://aseller.com'; }  // placeholder
-      }, ['Return to the website']),
+      }, [loc(I18N.ctrlReturn)]),
       el('button', {
         class: 'demo-ctrl-btn',
         onclick: function() {
           var f = document.getElementById('demo-feedback');
           if (f) f.removeAttribute('hidden');
         }
-      }, ['Help']),
+      }, [loc(I18N.ctrlHelp)]),
       el('button', {
         class: 'demo-ctrl-btn primary',
         onclick: function() { openGuide(); }
-      }, ['Seller Exchange Demo Guide'])
+      }, [loc(I18N.ctrlGuide)])
     ]);
   }
 
@@ -105,20 +160,23 @@
     var items = [];
     var index = 0;
     Object.keys(window.DEMO_TOURS).forEach(function(tourId) {
-      var t = window.DEMO_TOURS[tourId];
+      var tour = window.DEMO_TOURS[tourId];
       index += 1;
-      var available = !!t.available;
-      var steps = (t.steps && t.steps.length) || 0;
+      var available = !!tour.available;
+      var steps = (tour.steps && tour.steps.length) || 0;
+      var tourName = loc(tour.name);
 
       var row = el('li', { class: 'demo-guide-row ' + (available ? 'available' : 'coming-soon') }, [
         el('span', { class: 'demo-guide-num' }, [String(index)]),
-        el('span', { class: 'demo-guide-name' }, [t.name]),
-        el('span', { class: 'demo-guide-steps' }, [available ? steps + ' steps' : 'coming soon']),
+        el('span', { class: 'demo-guide-name' }, [tourName]),
+        el('span', { class: 'demo-guide-steps' }, [
+          available ? (steps + ' ' + loc(I18N.guideSteps)) : loc(I18N.guideComingSoon)
+        ]),
         available
           ? el('button', {
               class: 'demo-guide-play',
               html: playSvg,
-              'aria-label': 'Play ' + t.name,
+              'aria-label': loc(I18N.guidePlayDemo) + ': ' + tourName,
               onclick: function(e) {
                 e.stopPropagation();
                 closeGuide();
@@ -139,16 +197,16 @@
     return el('div', { id: 'demo-guide', class: 'demo-modal', hidden: 'hidden' }, [
       el('div', { class: 'demo-modal-content', style: 'max-width:640px;text-align:left;padding:24px 28px 20px;' }, [
         el('div', { class: 'demo-guide-header' }, [
-          el('h2', null, ['Seller Exchange tours']),
+          el('h2', null, [loc(I18N.guideTitle)]),
           el('button', {
             class: 'demo-guide-close-x',
-            'aria-label': 'Close',
+            'aria-label': loc(I18N.guideClose),
             onclick: closeGuide
           }, ['×'])
         ]),
         el('ul', { class: 'demo-guide-list' }, items),
         el('div', { class: 'demo-guide-footer' }, [
-          el('button', { class: 'demo-btn', onclick: closeGuide }, ['Play demo'])
+          el('button', { class: 'demo-btn', onclick: closeGuide }, [loc(I18N.guidePlayDemo)])
         ])
       ])
     ]);
@@ -169,7 +227,7 @@
     var iconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
     var textarea = el('textarea', {
       id: 'demo-feedback-message',
-      placeholder: 'Your message',
+      placeholder: loc(I18N.feedbackPlaceholder),
       oninput: function() {
         var submitBtn = document.getElementById('demo-feedback-submit');
         if (submitBtn) submitBtn.disabled = !textarea.value.trim();
@@ -185,27 +243,23 @@
         submitBtn.disabled = true;
         document.getElementById('demo-feedback').setAttribute('hidden', '');
       }
-    }, ['Submit']);
+    }, [loc(I18N.feedbackSubmit)]);
     var closeBtn = el('button', {
       class: 'demo-btn secondary',
       onclick: function() {
         document.getElementById('demo-feedback').setAttribute('hidden', '');
       }
-    }, ['Close']);
+    }, [loc(I18N.feedbackClose)]);
     return el('div', { id: 'demo-feedback', class: 'demo-modal', hidden: 'hidden' }, [
       el('div', { class: 'demo-modal-content' }, [
         el('div', { class: 'demo-feedback-icon', html: iconSvg }),
-        el('h2', null, ['Feedback']),
-        el('p', null, [
-          "If you have any feedback, we'd love to hear it. " +
-          "If you'd like to sign up fill the form with 'Your name. Sign up' " +
-          "and wait for the following instructions on the submitted e-mail."
-        ]),
+        el('h2', null, [loc(I18N.feedbackTitle)]),
+        el('p', null, [loc(I18N.feedbackBody)]),
         textarea,
         el('div', { class: 'demo-feedback-links' }, [
-          el('a', { href: '#', onclick: function(e){ e.preventDefault(); } }, ['Privacy Policy']),
+          el('a', { href: '#', onclick: function(e){ e.preventDefault(); } }, [loc(I18N.privacyPolicy)]),
           ' · ',
-          el('a', { href: '#', onclick: function(e){ e.preventDefault(); } }, ['Cookie Policy'])
+          el('a', { href: '#', onclick: function(e){ e.preventDefault(); } }, [loc(I18N.cookiePolicy)])
         ]),
         el('div', { style: 'display:flex;justify-content:center;gap:8px;' }, [
           submitBtn,
@@ -218,20 +272,20 @@
   function buildCompleteModal() {
     return el('div', { id: 'demo-complete', class: 'demo-modal', hidden: 'hidden' }, [
       el('div', { class: 'demo-modal-content' }, [
-        el('h2', null, ['Tour completed!']),
-        el('p', { id: 'demo-complete-body' }, ['You\'ve finished the tour. Explore other tours from the Demo Guide.']),
+        el('h2', null, [loc(I18N.completeTitle)]),
+        el('p', { id: 'demo-complete-body' }, [loc(I18N.completeBody)]),
         el('div', { style: 'margin-top:16px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap;' }, [
           el('button', { class: 'demo-btn', onclick: function() {
             document.getElementById('demo-complete').setAttribute('hidden', '');
             if (currentTour) startTour(currentTour.id);
-          }}, ['Start again']),
+          }}, [loc(I18N.completeStartAgain)]),
           el('button', { class: 'demo-btn secondary', onclick: function() {
             document.getElementById('demo-complete').setAttribute('hidden', '');
             openGuide();
-          }}, ['Open demo guide']),
+          }}, [loc(I18N.completeOpenGuide)]),
           el('button', { class: 'demo-btn secondary', onclick: function() {
             document.getElementById('demo-complete').setAttribute('hidden', '');
-          }}, ['Close'])
+          }}, [loc(I18N.completeClose)])
         ])
       ])
     ]);
@@ -247,20 +301,19 @@
           el('h3', { id: 'demo-tooltip-title' }, ['']),
           el('button', {
             id: 'demo-tooltip-close',
-            'aria-label': 'Close tour',
-            title: 'Close tour',
+            'aria-label': loc(I18N.closeTour),
+            title: loc(I18N.closeTour),
             onclick: skipTour
           }, ['×'])
         ]),
         el('div', { class: 'demo-tooltip-body', id: 'demo-tooltip-body' }, ['']),
         el('div', { class: 'demo-tooltip-actions' }, [
           el('div', { class: 'demo-tooltip-left' }, [
-            el('span', { class: 'demo-step-counter', id: 'demo-step-counter' }, ['']),
-            el('button', { class: 'demo-btn ghost', onclick: skipTour, id: 'demo-skip-btn' }, ['Skip'])
+            el('span', { class: 'demo-step-counter', id: 'demo-step-counter' }, [''])
           ]),
           el('div', { class: 'demo-tooltip-right' }, [
-            el('button', { class: 'demo-btn secondary', onclick: prevStep, id: 'demo-back-btn' }, ['Back']),
-            el('button', { class: 'demo-btn', onclick: nextStep, id: 'demo-next-btn' }, ['Next'])
+            el('button', { class: 'demo-btn secondary', onclick: prevStep, id: 'demo-back-btn' }, [loc(I18N.back)]),
+            el('button', { class: 'demo-btn', onclick: nextStep, id: 'demo-next-btn' }, [loc(I18N.next)])
           ])
         ])
       ])
@@ -424,11 +477,11 @@
     var backBtn = document.getElementById('demo-back-btn');
     var nextBtn = document.getElementById('demo-next-btn');
 
-    title.textContent = step.title;
-    body.textContent = step.body;
-    counter.textContent = 'Step ' + (currentStep + 1) + ' of ' + currentTour.steps.length;
+    title.textContent = loc(step.title);
+    body.textContent = loc(step.body);
+    counter.textContent = fmt(I18N.stepXofY, { n: currentStep + 1, total: currentTour.steps.length });
     backBtn.style.visibility = currentStep === 0 ? 'hidden' : 'visible';
-    nextBtn.textContent = currentStep === currentTour.steps.length - 1 ? 'Finish' : 'Next';
+    nextBtn.textContent = currentStep === currentTour.steps.length - 1 ? loc(I18N.finish) : loc(I18N.next);
 
     // Target highlight
     var target = step.target ? document.querySelector(step.target) : null;
